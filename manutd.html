@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Manchester United Player Stats Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body { font-family: sans-serif; padding: 20px; max-width: 900px; margin:auto; }
+  select, input, button { margin: 0 10px 10px 0; padding: 5px; }
+  canvas { max-width: 100%; margin-bottom: 40px; }
+  .controls { margin-bottom: 20px; }
+  h1 { color: #d00; }
+  p { line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<h1>Manchester United Player Stats Dashboard</h1>
+
+<p>
+  This interactive dashboard allows you to compare the performance of up to four Manchester United players for a selected season.
+  You can choose the season using the input box and select the players from the dropdowns.
+</p>
+
+<p>
+  The stats displayed include: <strong>Goals, Assists, Appearances, and Passes</strong>.
+  <br>
+  Note: The data is fetched from the API-Football database and is available for seasons approximately from <strong>2010 to the latest completed season</strong>.
+</p>
+
+<div class="controls">
+  <label>Season: <input type="number" id="seasonInput" value="2023" min="2010" max="2025"></label>
+  <button id="loadPlayersBtn">Load Players</button>
+</div>
+
+<div class="controls">
+  <label>Player A: <select id="player1"></select></label>
+  <label>Player B: <select id="player2"></select></label>
+  <label>Player C: <select id="player3"></select></label>
+  <label>Player D: <select id="player4"></select></label>
+</div>
+
+<canvas id="goalsChart"></canvas>
+<canvas id="assistsChart"></canvas>
+<canvas id="appearancesChart"></canvas>
+<canvas id="passesChart"></canvas>
+
+<script>
+const API_KEY = "655a036c93fec3a3bbf6cc5480a84390"; // Insert your API-Football key
+const TEAM_ID = 33; // Manchester United
+
+const player1Select = document.getElementById('player1');
+const player2Select = document.getElementById('player2');
+const player3Select = document.getElementById('player3');
+const player4Select = document.getElementById('player4');
+const seasonInput = document.getElementById('seasonInput');
+const loadPlayersBtn = document.getElementById('loadPlayersBtn');
+
+let goalsChart, assistsChart, appearancesChart, passesChart;
+
+// Fetch all players (pagination)
+async function fetchPlayers(season) {
+  let players = [];
+  let page = 1;
+  let totalPages = 1;
+
+  do {
+    const res = await fetch(`https://v3.football.api-sports.io/players?team=${TEAM_ID}&season=${season}&page=${page}`, {
+      headers: {
+        "X-RapidAPI-Key": API_KEY,
+        "X-RapidAPI-Host": "v3.football.api-sports.io"
+      }
+    });
+    const json = await res.json();
+    console.log("Players page", page, json); // Debug
+    if(!json.response) break;
+    players = players.concat(json.response.map(p => ({ id: p.player.id, name: p.player.name })));
+    totalPages = json.paging.total || 1;
+    page++;
+  } while(page <= totalPages);
+
+  if (players.length === 0) alert("No players returned. Check season or TEAM_ID.");
+  return players;
+}
+
+// Fetch stats for a player safely
+async function fetchPlayerStats(playerId, season) {
+  try {
+    const res = await fetch(`https://v3.football.api-sports.io/players?id=${playerId}&season=${season}`, {
+      headers: {
+        "X-RapidAPI-Key": API_KEY,
+        "X-RapidAPI-Host": "v3.football.api-sports.io"
+      }
+    });
+    const json = await res.json();
+    if (!json.response || !json.response[0] || !json.response[0].statistics || !json.response[0].statistics[0]) {
+      return { appearances: 0, goals: 0, assists: 0, passes: 0 };
+    }
+
+    const statsObj = json.response[0].statistics[0];
+    const games = statsObj.games || {};
+    const goals = statsObj.goals || {};
+    const passes = statsObj.passes || {};
+
+    return {
+      appearances: games.appearances || 0,
+      goals: goals.total || 0,
+      assists: goals.assists || 0,
+      passes: passes.total || 0
+    };
+  } catch (err) {
+    console.error("Error fetching player stats:", err);
+    return { appearances: 0, goals: 0, assists: 0, passes: 0 };
+  }
+}
+
+// Populate dropdowns
+async function loadPlayers() {
+  const season = seasonInput.value;
+  const players = await fetchPlayers(season);
+  if(players.length === 0) return;
+
+  [player1Select, player2Select, player3Select, player4Select].forEach(sel => sel.innerHTML = "");
+
+  players.forEach(p => {
+    [player1Select, player2Select, player3Select, player4Select].forEach(sel => {
+      sel.innerHTML += `<option value="${p.id}">${p.name}</option>`;
+    });
+  });
+
+  player1Select.value = players[0]?.id || "";
+  player2Select.value = players[1]?.id || "";
+  player3Select.value = players[2]?.id || "";
+  player4Select.value = players[3]?.id || "";
+
+  updateCharts();
+}
+
+// Update charts for 4 players
+async function updateCharts() {
+  const season = seasonInput.value;
+  const stats1 = await fetchPlayerStats(player1Select.value, season);
+  const stats2 = await fetchPlayerStats(player2Select.value, season);
+  const stats3 = await fetchPlayerStats(player3Select.value, season);
+  const stats4 = await fetchPlayerStats(player4Select.value, season);
+
+  const labels = [season];
+
+  const dataConfig = (...stats) => ({
+    labels,
+    datasets: [
+      { label: player1Select.options[player1Select.selectedIndex]?.text || "Player A", data: [stats[0]], backgroundColor:'#ef4444' },
+      { label: player2Select.options[player2Select.selectedIndex]?.text || "Player B", data: [stats[1]], backgroundColor:'#3b82f6' },
+      { label: player3Select.options[player3Select.selectedIndex]?.text || "Player C", data: [stats[2]], backgroundColor:'#facc15' },
+      { label: player4Select.options[player4Select.selectedIndex]?.text || "Player D", data: [stats[3]], backgroundColor:'#10b981' },
+    ]
+  });
+
+  const options = { 
+    responsive: true, 
+    plugins: { legend: { position:'top' }, tooltip: { enabled: true } } 
+  };
+
+  if(goalsChart) goalsChart.destroy();
+  goalsChart = new Chart(document.getElementById('goalsChart'), { 
+    type:'bar', data: dataConfig(stats1.goals, stats2.goals, stats3.goals, stats4.goals), 
+    options: { ...options, plugins: { ...options.plugins, title:{ display:true, text:'Goals' } } } 
+  });
+
+  if(assistsChart) assistsChart.destroy();
+  assistsChart = new Chart(document.getElementById('assistsChart'), { 
+    type:'bar', data: dataConfig(stats1.assists, stats2.assists, stats3.assists, stats4.assists), 
+    options: { ...options, plugins: { ...options.plugins, title:{ display:true, text:'Assists' } } } 
+  });
+
+  if(appearancesChart) appearancesChart.destroy();
+  appearancesChart = new Chart(document.getElementById('appearancesChart'), { 
+    type:'bar', data: dataConfig(stats1.appearances, stats2.appearances, stats3.appearances, stats4.appearances), 
+    options: { ...options, plugins: { ...options.plugins, title:{ display:true, text:'Appearances' } } } 
+  });
+
+  if(passesChart) passesChart.destroy();
+  passesChart = new Chart(document.getElementById('passesChart'), { 
+    type:'bar', data: dataConfig(stats1.passes, stats2.passes, stats3.passes, stats4.passes), 
+    options: { ...options, plugins: { ...options.plugins, title:{ display:true, text:'Passes' } } } 
+  });
+}
+
+// Event listeners
+loadPlayersBtn.addEventListener('click', loadPlayers);
+[player1Select, player2Select, player3Select, player4Select, seasonInput].forEach(sel => sel.addEventListener('change', updateCharts));
+
+// Load default players on page load
+loadPlayers();
+</script>
+
+</body>
+</html>
