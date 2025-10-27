@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>File Encryption — What to encrypt & how</title>
+  <style>
+    :root{--bg:#0f172a;--card:#0b1220;--accent:#ef4444;--muted:#9aa4b2;--glass:rgba(255,255,255,0.03)}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;margin:0;background:linear-gradient(180deg,#071027 0%, #0b1530 100%);color:#e6eef8}
+    .wrap{max-width:980px;margin:32px auto;padding:24px}
+    header{display:flex;align-items:center;gap:16px}
+    h1{margin:0;font-size:28px}
+    p.lead{color:var(--muted);margin-top:6px}
+    .card{background:var(--card);border-radius:12px;padding:18px;margin-top:18px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+    ul{line-height:1.6}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    pre{background:var(--glass);padding:12px;border-radius:8px;overflow:auto;color:#dceef8}
+    .cta{display:inline-block;margin-top:12px;padding:10px 14px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#f97316);color:white;text-decoration:none}
+    footer{margin-top:20px;color:var(--muted);font-size:13px}
+    @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="22" height="22" rx="6" fill="#0ea5a4" opacity="0.12"/><path d="M7 11v2a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3v-2" stroke="#06b6d4" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 11V9a4 4 0 0 1 8 0v2" stroke="#06b6d4" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div>
+        <h1>File Encryption — What to encrypt & how</h1>
+        <p class="lead">Practical guidance for everyday users: what to encrypt, cloud-provider risks, and friendly tool recommendations.</p>
+      </div>
+    </header>
+
+    <div class="card">
+      <h2>Quick rule of thumb</h2>
+      <p>If exposing a file would cause *harm, identity theft, financial loss, legal risk,* or *embarrassment*, encrypt it before storing or sharing.</p>
+    </div>
+
+    <div class="card grid">
+      <div>
+        <h3>Files you <strong>should</strong> encrypt</h3>
+        <ul>
+          <li>Passports, driving licence, national ID scans.</li>
+          <li>Bank statements, tax returns, payslips, investment records.</li>
+          <li>Passwords, API keys, SSH private keys, configuration files.</li>
+          <li>Client/customer data or confidential work documents.</li>
+          <li>Medical records and private health notes.</li>
+          <li>Personal journals, intimate photos, or anything private.</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Files you usually don’t need to encrypt</h3>
+        <ul>
+          <li>Public media (music, videos) and software installers.</li>
+          <li>General study notes with no personal data.</li>
+          <li>Files you plan to share publicly anyway.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Cloud providers & how to think about them</h2>
+      <p class="lead">Most mainstream cloud services encrypt data in transit and at rest — but that doesn’t always mean <em>only you</em> can read the files. Understand the difference between provider-managed keys and client-side (zero‑knowledge) encryption.</p>
+
+      <h4>Apple iCloud</h4>
+      <p>iCloud encrypts most data on Apple’s servers, but Apple manages the encryption keys for many items by default which means they can assist with recovery and — in certain circumstances — access the data. Apple has offered an optional Advanced Data Protection (end-to-end) feature in some regions that makes iCloud data readable <em>only</em> by the account owner, but availability and legal/regulatory changes may affect how that works in your country.</p>
+
+      <h4>Dropbox</h4>
+      <p>Dropbox encrypts data at rest and in transit but can manage the keys (so Dropbox can assist with recovery or respond to legal requests). Dropbox offers more advanced key management for business customers and there are client-side tools that add zero‑knowledge encryption on top.</p>
+
+      <h4>Google Drive</h4>
+      <p>Files on Google Drive are encrypted in transit and at rest using strong encryption. Google Workspace offers client-side encryption options for organisations, but for typical personal accounts Google controls the storage keys by default.</p>
+
+      <p class="muted">Bottom line: if you want cloud storage where the provider can’t read your files, use client-side (zero-knowledge) encryption before upload.</p>
+    </div>
+
+    <div class="card grid">
+      <div>
+        <h3>Recommended tools — friendly & practical</h3>
+        <ul>
+          <li><strong>Cryptomator</strong> — easy client-side, file-level encryption designed for cloud storage; works well with Dropbox, Google Drive and many others.</li>
+          <li><strong>VeraCrypt</strong> — create encrypted containers or full-disk encryption for advanced local protection.</li>
+          <li><strong>7‑Zip</strong> — quick encrypted archives using AES-256 for one-off uploads.</li>
+          <li><strong>Built-in disk encryption</strong> — BitLocker (Windows) or FileVault (macOS) for lost/stolen device protection.</li>
+        </ul>
+        <a class="cta" href="#tools">Show setup steps</a>
+      </div>
+
+      <div>
+        <h3>Practical tips</h3>
+        <ul>
+          <li>Encrypt before you upload. Client-side encryption keeps the provider from reading content.</li>
+          <li>Use a strong, unique passphrase or use a password manager (separate from cloud storage).</li>
+          <li>Keep a secure backup of your recovery key — losing it often means losing access forever.</li>
+          <li>Prefer per-file encryption (like Cryptomator) if you want selective sharing without decrypting large containers.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" id="tools">
+      <h2>Simple setup guide (Cryptomator + cloud)</h2>
+      <ol>
+        <li>Install Cryptomator on your device (Windows/macOS/Linux/iOS/Android).</li>
+        <li>Create a new vault and choose a password you won’t forget; write the recovery phrase down and keep it safe.</li>
+        <li>Point the vault location to a folder synced by your cloud client (Dropbox/Google Drive/OneDrive).</li>
+        <li>Lock the vault when finished; the cloud client will only see encrypted files and cannot read the contents.</li>
+      </ol>
+
+      <pre>// Example: Quick 7-Zip command to create an encrypted archive
+7z a -t7z -p -mhe=on secure-files.7z /path/to/folder
+// -p prompts for password, -mhe=on encrypts file names too
+      </pre>
+
+      <p>For whole-disk protection on a laptop, enable BitLocker (Windows) or FileVault (macOS) — these protect the device if lost or stolen, but do not stop cloud providers from seeing files uploaded without client-side encryption.</p>
+    </div>
+
+    <div class="card">
+      <h2>Checklist before you upload</h2>
+      <ul>
+        <li>Do I need the cloud to be able to read this file? If no → encrypt locally.</li>
+        <li>Do I have a secure backup of the password/recovery key? If no → make one now.</li>
+        <li>Is sharing required? If yes, consider encrypted sharing (export decrypted copies or use secure sharing tools).</li>
+      </ul>
+    </div>
+
+    <footer>
+      <p>Made with care — practical, friendly, and focused on keeping your digital life private. Want this as a downloadable single-page HTML file or a React version? Tell me and I’ll export it.</p>
+    </footer>
+  </div>
+</body>
+</html>
