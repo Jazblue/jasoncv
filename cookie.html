@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jason's Cookie Company</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-yellow-50 text-gray-800 font-sans">
+
+  <header class="bg-yellow-200 shadow p-4">
+    <h1 class="text-3xl font-bold text-center">🍪 Jason's Cookie Company</h1>
+    <p class="text-center mt-1 text-gray-600">Handmade cookies from Norfolk, UK</p>
+  </header>
+
+  <main class="max-w-3xl mx-auto p-6 space-y-8">
+    <section class="text-center">
+      <h2 class="text-2xl font-semibold mb-2">Welcome</h2>
+      <p>
+        We bake simple, nostalgic cookies with love from Norfolk, England.
+        From gooey chocolate chip to vegan-friendly delights, our handmade cookies are perfect for gifts, snacks, or a little self-indulgence.
+      </p>
+
+      <video width="640" height="360" controls class="mx-auto my-4">
+        <source src="https://ragvideo.s3.eu-west-2.amazonaws.com/cookievideo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+
+      <!-- Added image section -->
+      <img 
+        src="https://ragvideo.s3.eu-west-2.amazonaws.com/jasoncookie5.jpeg" 
+        alt="Jason Cookie Company" 
+        class="mx-auto rounded shadow my-4"
+      />
+    </section>
+
+    <section class="text-center">
+      <h2 class="text-xl font-semibold mb-2">🧠 Got a Question?</h2>
+      <p>Ask our Cookie Assistant anything about our company, products, or policies.</p>
+
+      <form id="ask-form" class="mt-4 space-y-2">
+        <input 
+          type="text" 
+          name="question" 
+          id="question" 
+          placeholder="e.g. Are any cookies nut-free?" 
+          class="w-full border p-2 rounded shadow-sm" 
+          required
+        />
+        <button type="submit" class="bg-yellow-400 hover:bg-yellow-500 text-white font-semibold px-4 py-2 rounded">
+          Ask
+        </button>
+      </form>
+
+      <div id="answer" class="mt-4 p-4 bg-white border rounded shadow-sm hidden"></div>
+    </section>
+  </main>
+
+  <footer class="bg-yellow-100 text-center p-4 text-sm text-gray-600">
+    &copy; 2025 Jason's Cookie Company. All rights reserved.
+  </footer>
+
+  <script>
+    document.getElementById('ask-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const question = document.getElementById('question').value;
+      const answerBox = document.getElementById('answer');
+      answerBox.classList.remove('hidden');
+      answerBox.textContent = 'Thinking... 🍪';
+
+      try {
+        const res = await fetch('https://49dyop31n3.execute-api.eu-west-2.amazonaws.com/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question })
+        });
+
+        const data = await res.json();
+        answerBox.textContent = data.answer || 'Sorry, we couldn’t find an answer.';
+      } catch (err) {
+        answerBox.textContent = 'Error contacting the cookie brain. Try again later!';
+      }
+    });
+  </script>
+
+</body>
+</html>
