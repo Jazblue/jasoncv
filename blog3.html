@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lambda-Powered Story Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 40px;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Building the Lambda-Powered Story Generator</h1>
+    <p>I recently completed a small but rewarding project: developing a serverless story generator using AWS Lambda, Python, and AI models. The entire process took just a couple of hours, though it built on earlier work I had done.</p>
+
+    <p>Some time ago, I created a Python program that could generate random stories using a locally hosted LLaMA model. The generation was entirely offline, which was both efficient and cost-effective.</p>
+
+    <p>When I learned about AWS Lambda—a serverless compute service that only runs in response to requests—I was intrigued. Since Lambda doesn't stay constantly active, it offered a budget-friendly solution for deploying my code.</p>
+
+    <p>However, integrating everything wasn’t entirely straightforward. I spent a couple of weeks troubleshooting how to connect <strong>n8n</strong>, a local automation tool, with my website. There’s still more to learn in that area.</p>
+
+    <p>For this project, I used both <strong>ChatGPT</strong> and <strong>Claude</strong> to assist with development. I found Claude particularly helpful for resolving complex coding issues where ChatGPT sometimes fell short.</p>
+
+    <p>Along the way, I ran into a few unexpected requirements. For example, I needed to generate an OpenAI API key and configure it as an environment variable in Lambda. I also discovered that any required Python libraries had to be packaged, zipped, and uploaded with the deployment bundle—a detail that AI models did point out, but which still took some trial and error to get right.</p>
+
+    <p>After thorough testing, everything finally came together. I set up an API Gateway to expose the Lambda function, and the final product is now live on my website. The generated stories are somewhat unpredictable—likely due to a high temperature setting in the AI sampling—but that randomness adds character. The JSON output at the end can occasionally introduce distortion, but overall, I’m quite pleased with the results.</p>
+
+    <p>This project not only deepened my understanding of serverless architecture and API integration, but also demonstrated the practical value of combining automation tools with AI capabilities.</p>
+  </div>
+</body>
+</html>
