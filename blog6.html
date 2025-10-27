@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>n8n Docker Networking Solution - Jason Harvey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .problem-section {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .solution-section {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tech-details {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .network-diagram {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .step {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .step h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+            border: 1px solid #4a5568;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .troubleshooting-tips {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .nav-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 25px;
+            margin: 10px;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .main-content, header {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🐳 Docker Networking Challenge</h1>
+            <p class="subtitle">Solving n8n Web Form Integration with AWS EC2 & Route 53</p>
+        </header>
+
+        <div class="main-content">
+            <div class="problem-section">
+                <h2>🚨 The Problem</h2>
+                <p>After spending a good afternoon working on my web form integration, I discovered through F12 developer tools that my web form couldn't connect to my n8n automation server. The error revealed that external web requests cannot reach Docker containers through HTTP when using private IP addresses.</p>
+            </div>
+
+            <div class="solution-section">
+                <h2>✅ The Solution</h2>
+                <p>Successfully configured a complete networking solution using AWS Route 53 DNS records, Nginx Proxy Manager, and proper Docker networking to make n8n.jasoncv.click accessible from the public internet with SSL encryption.</p>
+            </div>
+
+            <div class="highlight">
+                <h3>🎯 Key Learning</h3>
+                <p>External web services cannot reach Docker containers through private IPs - you need a reverse proxy and proper DNS configuration pointing to your public IP address.</p>
+            </div>
+
+            <h2>🔧 Technical Implementation</h2>
+
+            <div class="step">
+                <h3>Step 1: DNS Configuration</h3>
+                <p>Set up AWS Route 53 A record pointing n8n.jasoncv.click to public IP address (35.177.205.66)</p>
+                <div class="code-block">
+n8n.jasoncv.click → 35.177.205.66 (Public IP Only)
+❌ Never use private IPs like 10.x.x.x in DNS records
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>Step 2: Nginx Proxy Manager Setup</h3>
+                <p>Configured reverse proxy to handle public requests and route them to Docker containers</p>
+                <div class="code-block">
+Public Internet → Port 80/443 → Nginx Proxy Manager → Docker Container (Port 5678)
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>Step 3: Docker Network Configuration</h3>
+                <p>Containers communicate internally using Docker network or private IPs</p>
+                <div class="code-block">
+Nginx Proxy → Internal Docker Network → n8n Container
+                </div>
+            </div>
+
+            <div class="step">
+                <h3>Step 4: SSL Certificate</h3>
+                <p>Implemented Let's Encrypt SSL through Nginx Proxy Manager</p>
+                <div class="code-block">
+Let's Encrypt validates domain → Issues SSL cert → HTTPS enabled
+                </div>
+            </div>
+
+            <div class="network-diagram">
+                <h3>🌐 Network Flow Diagram</h3>
+                <pre>
+Internet Request (https://n8n.jasoncv.click)
+        ↓
+AWS Route 53 DNS Resolution
+        ↓
+Public IP: 35.177.205.66
+        ↓
+EC2 Security Groups (Ports 80, 443)
+        ↓
+Nginx Proxy Manager (Docker Container)
+        ↓
+Internal Docker Network
+        ↓
+n8n Container (Port 5678)
+        ↓
+Form Processing & Email Automation
+                </pre>
+            </div>
+
+            <div class="tech-details">
+                <h3>💡 Technical Details</h3>
+                <ul>
+                    <li><strong>AWS EC2:</strong> Host server running Docker containers</li>
+                    <li><strong>Route 53:</strong> DNS management for domain resolution</li>
+                    <li><strong>Nginx Proxy Manager:</strong> Reverse proxy with SSL termination</li>
+                    <li><strong>Docker:</strong> Container orchestration for n8n and proxy</li>
+                    <li><strong>Let's Encrypt:</strong> Free SSL certificate automation</li>
+                    <li><strong>n8n:</strong> Workflow automation for form processing</li>
+                </ul>
+            </div>
+
+            <div class="troubleshooting-tips">
+                <h3>🔍 Troubleshooting Checklist</h3>
+                <ul>
+                    <li>✅ DNS points to public IP only (never private)</li>
+                    <li>✅ Proxy forwards to correct internal IP/port</li>
+                    <li>✅ Security groups allow inbound 80, 443, and service ports</li>
+                    <li>✅ Docker containers are running and accessible</li>
+                    <li>✅ SSL certificate issued after DNS propagation</li>
+                    <li>✅ Firewall rules configured properly</li>
+                </ul>
+            </div>
+
+            <div class="highlight">
+                <h3>🏆 Final Result</h3>
+                <p>Successfully deployed a secure, scalable contact form automation system that processes form submissions through n8n workflows and delivers them directly to email - all accessible via HTTPS with proper SSL encryption.</p>
+            </div>
+
+            <div class="tech-details">
+                <h3>🛠️ Skills Demonstrated</h3>
+                <ul>
+                    <li>AWS EC2 and Route 53 management</li>
+                    <li>Docker container networking</li>
+                    <li>Reverse proxy configuration</li>
+                    <li>SSL certificate management</li>
+                    <li>DNS troubleshooting</li>
+                    <li>Security group configuration</li>
+                    <li>Network diagnostics and debugging</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="/" class="nav-button">← Back to Main CV</a>
+            <a href="https://n8n.jasoncv.click" class="nav-button">View Live n8n Instance</a>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 Jason Harvey - IT Professional & Problem Solver</p>
+        </div>
+    </div>
+</body>
+</html>

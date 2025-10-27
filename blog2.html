@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AWS Website Setup Troubleshooting Guide</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: #fff;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+      text-align: left;
+    }
+    th {
+      background: #2980b9;
+      color: #fff;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    li::before {
+      content: "\2713";
+      color: green;
+      margin-right: 10px;
+    }
+    .checklist {
+      background: #fff;
+      padding: 15px;
+      margin-top: 20px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>AWS Website Setup Troubleshooting Guide</h1>
+
+  <h2>1. Certificate (ACM) Issues</h2>
+  <table>
+    <tr><th>Problem</th><th>Fix</th></tr>
+    <tr><td>Certificate stuck in “Pending Validation”</td><td>Add CNAME record from ACM into Route 53</td></tr>
+    <tr><td>CloudFront doesn’t see your certificate</td><td>Ensure cert is in <strong>us-east-1</strong></td></tr>
+    <tr><td>Wrong domain in cert</td><td>Include exact domain (e.g. both <code>www.example.com</code> and <code>example.com</code>)</td></tr>
+  </table>
+
+  <h2>2. Route 53 DNS Issues</h2>
+  <table>
+    <tr><th>Problem</th><th>Fix</th></tr>
+    <tr><td>Domain doesn't point to site</td><td>Create A – Alias record to CloudFront distribution</td></tr>
+    <tr><td>Record pointing to wrong region</td><td>Use proper distribution URL like <code>d1234.cloudfront.net</code></td></tr>
+    <tr><td>Propagation delay</td><td>Wait 15–30 minutes for DNS to update</td></tr>
+  </table>
+
+  <h2>3. CloudFront + S3 Origin Issues</h2>
+  <table>
+    <tr><th>Problem</th><th>Fix</th></tr>
+    <tr><td>403 Forbidden error</td><td>Set up Origin Access Control (OAC) or OAI properly</td></tr>
+    <tr><td>CloudFront shows error page</td><td>Ensure correct origin and index document is set</td></tr>
+  </table>
+
+  <h2>4. Domain Not Secure (HTTPS Problems)</h2>
+  <table>
+    <tr><th>Problem</th><th>Fix</th></tr>
+    <tr><td>Site not secure in browser</td><td>Use custom SSL cert in CloudFront</td></tr>
+    <tr><td>Redirect loop / no HTTPS</td><td>Set CloudFront behavior to redirect HTTP to HTTPS</td></tr>
+    <tr><td>S3 static hosting with HTTPS fails</td><td>Use CloudFront in front of S3</td></tr>
+  </table>
+
+  <h2>5. S3 Bucket Setup Mistakes</h2>
+  <table>
+    <tr><th>Problem</th><th>Fix</th></tr>
+    <tr><td>Files not loading</td><td>Make sure files are public or accessible via CloudFront</td></tr>
+    <tr><td>Wrong bucket policy</td><td>Apply correct policy allowing CloudFront access</td></tr>
+    <tr><td>Static hosting not enabled</td><td>Enable static website hosting with index.html</td></tr>
+  </table>
+
+  <div class="checklist">
+    <h2>✅ Final Setup Checklist</h2>
+    <ul>
+      <li>ACM certificate is issued (in us-east-1 for CloudFront)</li>
+      <li>Route 53 DNS A record (alias) points to CloudFront</li>
+      <li>CloudFront has domain in Alternate CNAMEs + correct SSL cert</li>
+      <li>S3 bucket has website hosting enabled or OAC set</li>
+      <li>CloudFront distribution is deployed (may take 10–20 mins)</li>
+      <li>index.html file is uploaded and set as default root</li>
+    </ul>
+  </div>
+
+</body>
+</html>
