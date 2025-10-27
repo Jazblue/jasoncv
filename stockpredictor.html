@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI + MACD & Crypto Trend Predictor</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+    header {
+      background-color: #1a202c;
+      color: #fff;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    header p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+    .btn {
+      display: inline-block;
+      background-color: #2b6cb0;
+      color: #fff;
+      padding: 12px 30px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    .btn:hover {
+      background-color: #2c5282;
+    }
+    section {
+      padding: 60px 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    section h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 40px;
+    }
+    .features, .how-it-works {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .feature, .step {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      flex: 1 1 250px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    #example-analysis div {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    .chart {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .chart img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .disclaimer {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #a00;
+      font-style: italic;
+      text-align: center;
+    }
+    #news-feed {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 40px 20px;
+      background-color: #f0f4f8;
+    }
+    .news-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .news-card h3 {
+      margin-top: 0;
+      font-size: 1.4rem;
+    }
+    .news-card ul {
+      list-style-type: none;
+      padding: 0;
+      max-height: 180px;
+      overflow-y: auto;
+      margin: 0;
+    }
+    .news-card li {
+      margin-bottom: 8px;
+    }
+    .news-card a {
+      text-decoration: none;
+      color: #2b6cb0;
+    }
+    .news-card a:hover {
+      text-decoration: underline;
+    }
+    .back-home {
+      text-align: center;
+      margin: 40px 0;
+    }
+    footer {
+      background-color: #1a202c;
+      color: #fff;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    footer a {
+      color: #63b3ed;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    /* Crypto container styles */
+    .container {
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    .container h1 {
+      color: #007BFF;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin: 5px 0;
+    }
+    .trend {
+      font-weight: bold;
+      margin-top: 15px;
+    }
+    .chart-container {
+      margin: 20px 0;
+    }
+    canvas {
+      background: #f9f9f9;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero Section -->
+  <header>
+    <h1>AI + MACD: Predict Stock Trends with Ease</h1>
+    <p>Simple, data-backed predictions to help you make smarter investment decisions.</p>
+    <a href="mailto:jason_harvey@jasoncv.click" class="btn">Email Me for More Info</a>
+  </header>
+
+  <!-- Overview Section -->
+  <section id="overview">
+    <h2>What This Page Is About</h2>
+    <p>
+      Shares, also known as stocks, represent ownership in a company. When you buy a share, 
+      you’re essentially buying a small piece of that company, with the potential for profits 
+      if the business grows and its stock price rises. Investors and traders often study 
+      market indicators to help them understand potential price movements and trends.
+    </p>
+    <p>
+      This website introduces a simple <strong>AI-powered stock prediction tool</strong> 
+      that uses the <strong>MACD (Moving Average Convergence Divergence)</strong> technical 
+      indicator to forecast possible stock trends. The goal is to make complex financial 
+      insights more accessible by providing clear, easy-to-read predictions for educational 
+      purposes.
+    </p>
+    <p>
+      Our tool is not about live trading alerts or advanced dashboards—it’s a straightforward 
+      predictor designed to help you understand potential market momentum and trend changes.
+    </p>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features">
+    <h2>Why Use Our AI Predictor?</h2>
+    <div class="features">
+      <div class="feature">
+        <h3>AI-Powered Predictions</h3>
+        <p>Quick insights based on MACD trends.</p>
+      </div>
+      <div class="feature">
+        <h3>Easy to Use</h3>
+        <p>Enter a stock symbol and get predictions in seconds.</p>
+      </div>
+      <div class="feature">
+        <h3>Data-Driven</h3>
+        <p>Predictions are based on historical trends for reliability.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works">
+    <h2>See How Simple It Is</h2>
+    <div class="how-it-works">
+      <div class="step">
+        <h3>Step 1</h3>
+        <p>Input a stock symbol to analyze.</p>
+      </div>
+      <div class="step">
+        <h3>Step 2</h3>
+        <p>AI interprets the MACD trend.</p>
+      </div>
+      <div class="step">
+        <h3>Step 3</h3>
+        <p>Receive a simple prediction of likely movement.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Example Analysis Section -->
+  <section id="example-analysis">
+    <h2>Example: MACD Technical Analysis for Tesla (TSLA)</h2>
+
+    <div class="chart">
+      <img src="https://r2.chart-img.com/20250923/tradingview/advanced-chart/f63fe1fb-c1bf-43f8-b38b-1b541646ce91.png" alt="Tesla TradingView Chart - Sep 9 2025">
+      <p><em>Tesla (TSLA) TradingView chart – September 9, 2025</em></p>
+    </div>
+
+    <div>
+      <h3>Trend Direction and Momentum (Overview):</h3>
+      <p><strong>Initial Weakness (Aug 2023 – Early 2024):</strong> MACD was below zero, histogram weak—indicating bearish bias.</p>
+      <p><strong>Strong Bullish (Early 2024 – Early 2025):</strong> MACD surged above zero, histogram expanded—accelerating bullish momentum.</p>
+      <p><strong>Sharp Bearish (Early 2025 – Mid-2025):</strong> MACD dropped below zero, histogram plunged—strong downtrend.</p>
+      <p><strong>Recent Bullish Recovery (Mid-2025 – Sep 2025):</strong> MACD crossed above signal/zero line, histogram positive—new uptrend forming.</p>
+    </div>
+
+    <p class="disclaimer">
+      ⚠️ Disclaimer: This is not trading or financial advice.  
+      The information is AI-generated and predictive, for educational purposes only.
+    </p>
+  </section>
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; background-color: #f9f9f9;">
+  <h2 style="color: #ff6600;">🚀 Meet Your Live Crypto Assistant!</h2>
+  <p>Stop scrolling through endless charts—get <strong>crypto insights instantly</strong>. Our assistant gives you:</p>
+  
+  <ul style="list-style-type: none; padding-left: 0;">
+    <li style="margin-bottom: 10px;">✅ <strong>Live Prices</strong> – Bitcoin, Ethereum, BNB, and thousands of altcoins</li>
+    <li style="margin-bottom: 10px;">✅ <strong>Market Insights</strong> – Top coins by market cap and global crypto metrics</li>
+    <li style="margin-bottom: 10px;">✅ <strong>Detailed Coin Info</strong> – Rank, market cap, 24h changes, official links, and more</li>
+    <li style="margin-bottom: 10px;">✅ <strong>Instant Conversions</strong> – Convert crypto to USD, GBP, JPY, or your preferred currency</li>
+  </ul>
+  
+  <p>Whether you’re trading, investing, or keeping an eye on the market, this <strong>AI-powered assistant works for you in real time</strong>.</p>
+  
+  <p style="text-align: center; margin-top: 20px;">
+    <a href="#launch" style="background-color: #ff6600; color: #fff; text-decoration: none; padding: 12px 25px; border-radius: 5px; font-weight: bold;">Email me jasonmariakieran@gmail.com for more info</a>
+  </p>
+  
+  <p style="margin-top: 20px; color: #666;">#CryptoAI #Bitcoin #Ethereum #Altcoins #InvestSmart #CryptoAssistant</p>
+</div>
+
+
+  <!-- Crypto Predictor Section -->
+  <div class="container">
+    <h1>Smart Crypto Trend Predictor</h1>
+    <p>Our tool delivers instant trend insights for four major cryptocurrencies: <strong>Bitcoin, Ethereum, Cardano, and Dogecoin</strong>. By analyzing real-time and historical market data, it predicts whether a coin is trending <strong>upwards</strong> or <strong>downwards</strong>, helping users make informed decisions quickly.</p>
+
+    <h2>Coins Supported:</h2>
+    <ul>
+        <li>BTC</li>
+        <li>ETH</li>
+        <li>ADA</li>
+        <li>DOGE</li>
+    </ul>
+
+    <h2>How it Works:</h2>
+    <ul>
+        <li>Uses historical price patterns and real-time updates to detect trends</li>
+        <li>Provides easy-to-read “upward” or “downward” indicators</li>
+        <li>Fully integrated into your browser for instant access</li>
+    </ul>
+
+    <h2>Current Trends:</h2>
+    <ul id="trend-list">
+        <li id="trend-bitcoin">Bitcoin: Fetching trend...</li>
+        <li id="trend-ethereum">Ethereum: Fetching trend...</li>
+        <li id="trend-cardano">Cardano: Fetching trend...</li>
+        <li id="trend-dogecoin">Dogecoin: Fetching trend...</li>
+    </ul>
+
+    <h2>Trend Charts (7 Days):</h2>
+    <div class="chart-container">
+        <canvas id="chart-bitcoin"></canvas>
+        <canvas id="chart-ethereum"></canvas>
+        <canvas id="chart-cardano"></canvas>
+        <canvas id="chart-dogecoin"></canvas>
+    </div>
+
+    <p><em>Note:</em> While marketed as a “predictive tool,” it uses advanced trend analysis algorithms rather than AI. It’s fast, reliable, and ideal for crypto enthusiasts who want a clear view of market trends.</p>
+  </div>
+
+  <!-- Stock News Feeds -->
+  <section id="news-feed">
+    <div class="news-card">
+      <h3>Tesla (TSLA)</h3>
+      <div id="rss-tsla">Loading news...</div>
+    </div>
+    <div class="news-card">
+      <h3>Apple (AAPL)</h3>
+      <div id="rss-aapl">Loading news...</div>
+    </div>
+    <div class="news-card">
+      <h3>Microsoft (MSFT)</h3>
+      <div id="rss-msft">Loading news...</div>
+    </div>
+    <div class="news-card">
+      <h3>S&P 500 (^GSPC)</h3>
+      <div id="rss-gspc">Loading news...</div>
+    </div>
+  </section>
+
+  <!-- Back to Home Button -->
+  <div class="back-home">
+    <a href="https://jasoncv.click" class="btn">⬅ Back to Home Page</a>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 AI + MACD Stock Predictor.</p>
+    <p>Contact: <a href="mailto:jason_harvey@jasoncv.click">jason_harvey@jasoncv.click</a></p>
+    <p><a href="https://jasoncv.click">Back to Main Page</a></p>
+  </footer>
+
+  <!-- RSS Reader Script -->
+  <script>
+    async function loadRSS(feedUrl, elementId) {
+      try {
+        const response = await fetch("https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(feedUrl));
+        const data = await response.json();
+        let html = "<ul>";
+        data.items.slice(0, 5).forEach(item => {
+          html += `<li><a href="${item.link}" target="_blank">${item.title}</a></li>`;
+        });
+        html += "</ul>";
+        document.getElementById(elementId).innerHTML = html;
+      } catch (e) {
+        document.getElementById(elementId).innerHTML = "<p>Unable to load stock news feed.</p>";
+      }
+    }
+
+    loadRSS("https://feeds.finance.yahoo.com/rss/2.0/headline?s=TSLA&region=US&lang=en-US", "rss-tsla");
+    loadRSS("https://feeds.finance.yahoo.com/rss/2.0/headline?s=AAPL&region=US&lang=en-US", "rss-aapl");
+    loadRSS("https://feeds.finance.yahoo.com/rss/2.0/headline?s=MSFT&region=US&lang=en-US", "rss-msft");
+    loadRSS("https://feeds.finance.yahoo.com/rss/2.0/headline?s=^GSPC&region=US&lang=en-US", "rss-gspc");
+  </script>
+
+  <!-- Crypto Script -->
+  <script>
+    async function fetchTrendAndChart(coinId, trendElementId, chartElementId) {
+        try {
+            const response = await fetch(`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=7`);
+            const data = await response.json();
+            const prices = data.prices.map(p => p[1]);
+            const labels = data.prices.map(p => new Date(p[0]).toLocaleDateString());
+
+            const trend = prices[prices.length - 1] > prices[prices.length - 3] ? "Upward 📈" : "Downward 📉";
+            document.getElementById(trendElementId).innerText = `${coinId.charAt(0).toUpperCase() + coinId.slice(1)} Trend: ${trend}`;
+
+            new Chart(document.getElementById(chartElementId), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: `${coinId.toUpperCase()} Price (USD)`,
+                        data: prices,
+                        borderColor: '#007BFF',
+                        backgroundColor: 'rgba(0,123,255,0.2)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: true },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: {
+                        x: { display: true },
+                        y: { display: true }
+                    }
+                }
+            });
+
+        } catch (error) {
+            document.getElementById(trendElementId).innerText = `${coinId.charAt(0).toUpperCase() + coinId.slice(1)}: Error fetching trend`;
+        }
+    }
+
+    fetchTrendAndChart('bitcoin', 'trend-bitcoin', 'chart-bitcoin');
+    fetchTrendAndChart('ethereum', 'trend-ethereum', 'chart-ethereum');
+    fetchTrendAndChart('cardano', 'trend-cardano', 'chart-cardano');
+    fetchTrendAndChart('dogecoin', 'trend-dogecoin', 'chart-dogecoin');
+  </script>
+
+</body>
+</html>
