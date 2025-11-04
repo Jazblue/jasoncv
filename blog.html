@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Common Problems with AWS Websites</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background: #FF5722;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #FF5722;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        code {
+            background: #eee;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Common Problems with AWS Websites</h1>
+    </header>
+    <main>
+        <h2>1. Website Not Loading</h2>
+        <ul>
+            <li>Check that <strong>static website hosting</strong> is enabled in S3.</li>
+            <li>Ensure your HTML file is named <code>index.html</code>.</li>
+            <li>Verify bucket permissions and public access settings.</li>
+        </ul>
+
+        <h2>2. Access Denied Errors</h2>
+        <ul>
+            <li>Ensure the S3 bucket policy allows public read access:</li>
+            <pre>{
+    "Version": "2012-10-17",
+    "Statement": [{
+        "Effect": "Allow",
+        "Principal": "*",
+        "Action": "s3:GetObject",
+        "Resource": "arn:aws:s3:::your-bucket-name/*"
+    }]
+}</pre>
+            <li>Check that "Block Public Access" is turned off if needed.</li>
+        </ul>
+
+        <h2>3. Slow Website Loading</h2>
+        <ul>
+            <li>Use <strong>Amazon CloudFront</strong> for CDN caching to improve speed globally.</li>
+            <li>Compress your HTML, CSS, and images.</li>
+        </ul>
+
+        <h2>4. Domain Issues</h2>
+        <ul>
+            <li>If using a custom domain with Route 53, check DNS configuration and propagation.</li>
+            <li>Make sure the bucket name matches the domain for static website hosting.</li>
+        </ul>
+
+        <h2>5. HTTPS/SSL Problems</h2>
+        <ul>
+            <li>S3 website endpoints do not support HTTPS directly. Use CloudFront to enable HTTPS.</li>
+            <li>Check your SSL/TLS certificate in AWS Certificate Manager if using a custom domain.</li>
+        </ul>
+
+        <h2>6. GitHub Pages Specific Issues</h2>
+        <ul>
+            <li>Website not showing changes: ensure you pushed changes to the correct branch (<code>main</code> or <code>gh-pages</code>).</li>
+            <li>Custom domain not working: check your <code>CNAME</code> file and DNS records.</li>
+        </ul>
+    </main>
+</body>
+</html>
