@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Host a Basic HTML Website on AWS & GitHub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background: #D32F2F;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        main {
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #D32F2F;
+        }
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        pre {
+            background: #eee;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        ol {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Host a Basic HTML Website on AWS & GitHub</h1>
+    </header>
+    <main>
+        <section>
+            <h2>1. Hosting on AWS S3</h2>
+            <ol>
+                <li><strong>Create an S3 Bucket:</strong> Go to AWS S3 and create a bucket. Make sure the bucket name is globally unique.</li>
+                <li><strong>Enable Static Website Hosting:</strong> In the bucket properties, enable "Static website hosting" and set <code>index.html</code> as the index document.</li>
+                <li><strong>Upload Your HTML File:</strong> Upload your HTML file (like this page) to the bucket.</li>
+                <li><strong>Set Permissions:</strong> Add a bucket policy to allow public read access:
+                    <pre>{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::your-bucket-name/*"
+        }
+    ]
+}</pre>
+                </li>
+                <li><strong>Access Your Website:</strong> Use the endpoint in the S3 bucket static website hosting settings.</li>
+            </ol>
+            <p>Optional: Use <strong>Route 53</strong> to connect a custom domain.</p>
+        </section>
+
+        <section>
+            <h2>2. Hosting on GitHub Pages</h2>
+            <ol>
+                <li><strong>Create a GitHub Repository:</strong> Go to <a href="https://github.com" target="_blank">GitHub</a> and create a new repository. Initialize it with a README if you like.</li>
+                <li><strong>Add Your HTML File:</strong> Upload your <code>index.html</code> file to the repository.</li>
+                <li><strong>Enable GitHub Pages:</strong> 
+                    <ul>
+                        <li>Go to <strong>Settings → Pages</strong>.</li>
+                        <li>Select the branch (usually <code>main</code>) and root folder as the source.</li>
+                        <li>Click <strong>Save</strong>. GitHub will provide a public URL for your website.</li>
+                    </ul>
+                </li>
+                <li><strong>Visit Your Website:</strong> Use the provided URL to see your live site.</li>
+                <li><strong>Optional Custom Domain:</strong> You can add a custom domain in the GitHub Pages settings using a CNAME record.</li>
+            </ol>
+        </section>
+    </main>
+</body>
+</html>
