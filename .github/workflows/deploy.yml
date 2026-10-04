@@ -24,11 +24,33 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Deploy static site to S3 bucket
+      # Two passes because `aws s3 sync` applies one --cache-control to every
+      # object it copies, so HTML and binary assets need separate policies.
+      #
+      # CloudFront uses the Managed-CachingOptimized policy (DefaultTTL 86400).
+      # With no origin Cache-Control headers every object inherited that full
+      # 24 hour TTL, which is why deploys were not visible for ~24 hours.
+      #
+      # Filter order matters: aws s3 sync applies the LAST matching rule, and an
+      # --include on its own does not restrict anything because every file also
+      # matches the implicit include-all. Each pass therefore starts with
+      # --exclude "*" and then re-includes only the files that pass owns.
+      - name: Deploy static assets (images, documents) - long cache
         run: |
           aws s3 sync . s3://${{ secrets.S3_BUCKET_NAME }}/ --delete \
-            --exclude ".git/*" \
-            --exclude ".github/*"
+            --exclude "*" \
+            --include "*.jpg" --include "*.jpeg" --include "*.png" \
+            --include "*.gif" --include "*.webp" --include "*.svg" \
+            --include "*.ico" --include "*.pdf" --include "*.docx" \
+            --include "*.doc" --include "*.mp4" --include "*.webm" \
+            --cache-control "public,max-age=2592000,immutable"
+
+      - name: Deploy HTML - short cache so updates appear quickly
+        run: |
+          aws s3 sync . s3://${{ secrets.S3_BUCKET_NAME }}/ \
+            --exclude "*" \
+            --include "*.html" \
+            --cache-control "public,max-age=300,must-revalidate"
 
       # `aws s3 sync --delete` does not remove destination files that are
       # excluded by a filter, so anything published by earlier runs has to be
