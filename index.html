@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Jason Harvey - AWS Cloud Engineer | Customer Service CV - Professional experience in IT support, AWS cloud projects, and customer service">
     <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://analytics.ahrefs.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.jasoncv.click https://8b3275icpc.execute-api.eu-west-2.amazonaws.com https://www.googleapis.com https://api.openweathermap.org https://api.coingecko.com; font-src 'self' https://cdnjs.cloudflare.com;">
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://analytics.ahrefs.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://api.jasoncv.click https://8b3275icpc.execute-api.eu-west-2.amazonaws.com https://www.googleapis.com https://api.openweathermap.org https://api.coingecko.com; font-src 'self' https://cdnjs.cloudflare.com;">
 
     <title>Jason Harvey – AWS Cloud Engineer | Customer Service CV</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -115,6 +115,33 @@
         .social-link:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Circular icon-only social links (GitHub / LinkedIn) */
+        .social-link-icon {
+            width: 46px;
+            height: 46px;
+            padding: 0;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+        }
+
+        .social-link-icon:hover {
+            box-shadow: 0 8px 22px rgba(102, 126, 234, 0.5);
+        }
+
+        .social-link-icon i {
+            line-height: 1;
+        }
+
+        @media (max-width: 768px) {
+            .social-link-icon {
+                width: 42px;
+                height: 42px;
+                font-size: 1.1rem;
+            }
         }
 
         .section {
@@ -475,11 +502,13 @@
                 Jason Harvey is an AWS Cloud Engineer and IT Helpdesk specialist from England with over 10 years of customer service experience, specialising in AWS cloud architecture, infrastructure automation, and customer-focused technical support solutions.
             </div>
             <div class="social-links">
-                <a href="https://www.linkedin.com/in/jason-harvey-44574791/" target="_blank" class="social-link">
-                    <i class="fab fa-linkedin"></i> LinkedIn
+                <a href="https://www.linkedin.com/in/jason-harvey-44574791/" target="_blank" rel="noopener noreferrer"
+                   class="social-link social-link-icon" aria-label="LinkedIn" title="LinkedIn">
+                    <i class="fab fa-linkedin" aria-hidden="true"></i>
                 </a>
-                <a href="https://github.com/Jazblue" target="_blank" class="social-link">
-                    <i class="fab fa-github"></i> GitHub
+                <a href="https://github.com/Jazblue" target="_blank" rel="noopener noreferrer"
+                   class="social-link social-link-icon" aria-label="GitHub" title="GitHub">
+                    <i class="fab fa-github" aria-hidden="true"></i>
                 </a>
                 <a href="mailto:jasonmariakieran@gmail.com" class="social-link">
                     <i class="fas fa-envelope"></i> jasonmariakieran@gmail.com
