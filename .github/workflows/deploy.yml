@@ -4,7 +4,7 @@ name: Deploy Static Website to S3
 on:
   push:
     branches:
-      - main 
+      - main
 
 jobs:
   deploy:
@@ -12,6 +12,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          # Do not leave the GITHUB_TOKEN in .git/config. It is written there as
+          # an AUTHORIZATION extraheader, and .git must never reach the bucket.
+          persist-credentials: false
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -22,8 +26,33 @@ jobs:
 
       - name: Deploy static site to S3 bucket
         run: |
-          aws s3 sync . s3://${{ secrets.S3_BUCKET_NAME }}/ --delete 
-          
+          aws s3 sync . s3://${{ secrets.S3_BUCKET_NAME }}/ --delete \
+            --exclude ".git/*" \
+            --exclude ".github/*"
+
+      # `aws s3 sync --delete` does not remove destination files that are
+      # excluded by a filter, so anything published by earlier runs has to be
+      # deleted explicitly.
+      - name: Remove files that must never be published
+        run: |
+          aws s3 rm s3://${{ secrets.S3_BUCKET_NAME }}/.git --recursive || true
+          aws s3 rm s3://${{ secrets.S3_BUCKET_NAME }}/.github --recursive || true
+
+      - name: Verify sensitive paths were removed
+        run: |
+          failed=0
+          for key in .git/config .git/HEAD .github/workflows/deploy.yml; do
+            if aws s3api head-object \
+                 --bucket "${{ secrets.S3_BUCKET_NAME }}" \
+                 --key "$key" >/dev/null 2>&1; then
+              echo "ERROR: $key still exists in the bucket"
+              failed=1
+            else
+              echo "OK: $key is not in the bucket"
+            fi
+          done
+          [ "$failed" -eq 0 ] || exit 1
+
       - name: Output S3 Website URL
         run: |
           echo "Website is live at: http://${{ secrets.S3_BUCKET_NAME }}.s3-website.${{ secrets.AWS_REGION }}.amazonaws.com"
