@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://jasoncv.click/amyjohnson.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://jasoncv.click/awswebsitesetup.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -16,27 +11,12 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jasoncv.click/blog2.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jasoncv.click/blog3.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://jasoncv.click/blog6.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://jasoncv.click/cloudengineer.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jasoncv.click/cookie.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -56,27 +36,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://jasoncv.click/manutd.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jasoncv.click/personal.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jasoncv.click/scanwebsite.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://jasoncv.click/stockpredictor.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://jasoncv.click/websitedesign.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
