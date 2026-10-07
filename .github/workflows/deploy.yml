@@ -52,6 +52,14 @@ jobs:
             --include "*.html" \
             --cache-control "public,max-age=300,must-revalidate"
 
+      - name: Deploy public text/XML files - short cache
+        run: |
+          aws s3 sync . s3://${{ secrets.S3_BUCKET_NAME }}/ \
+            --exclude "*" \
+            --include "robots.txt" \
+            --include "sitemap.xml" \
+            --cache-control "public,max-age=300,must-revalidate"
+
       # `aws s3 sync --delete` does not remove destination files that are
       # excluded by a filter, so anything published by earlier runs has to be
       # deleted explicitly.
