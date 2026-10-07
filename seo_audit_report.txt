@@ -1,8 +1,0 @@
-JasonCV origin: https://github.com/Jazblue/jasoncv.git
-JasonCV branch: main
-Drone origin: https://github.com/Jazblue/Drone.git
-Drone branch: main
-JasonCV SEO issues: missing robots, missing canonical, missing og tags, missing twitter card, missing schema.org JSON-LD, no internal link to Drone site
-Drone SEO issues: missing viewport, missing robots, missing twitter card, missing schema.org JSON-LD, no internal link to JasonCV site
-JasonCV deployment details: has GitHub Actions AWS S3 workflow; no CNAME; references S3 bucket secrets
-Drone deployment details: has CNAME; Google verification: google52cc9a7e267bf3d7.html; has robots.txt; has sitemap.xml
