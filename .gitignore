@@ -1,0 +1,15 @@
+# CV documents
+*.pdf
+*.docx
+*.doc
+
+# Images
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+
+# OS
+.DS_Store
+Thumbs.db
