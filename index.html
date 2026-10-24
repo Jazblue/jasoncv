@@ -180,6 +180,54 @@
             }
         }
 
+        .contact-cta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 28px;
+            max-width: 1200px;
+            margin: 0 auto 30px;
+            padding: 30px 36px;
+            border-radius: 20px;
+            color: #fff;
+            background: linear-gradient(120deg, #202d59 0%, #4f46a5 58%, #7550a8 100%);
+            box-shadow: 0 16px 38px rgba(35, 39, 95, 0.24);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .contact-cta::after {
+            content: "";
+            position: absolute;
+            width: 210px;
+            height: 210px;
+            right: 20%;
+            top: -145px;
+            border: 1px solid rgba(255,255,255,0.17);
+            border-radius: 50%;
+            box-shadow: 0 0 0 28px rgba(255,255,255,0.035), 0 0 0 58px rgba(255,255,255,0.025);
+            pointer-events: none;
+        }
+
+        .contact-cta-copy, .contact-cta-actions { position: relative; z-index: 1; }
+        .contact-cta-eyebrow { display: inline-block; font-size: 0.75rem; letter-spacing: 0.14em; font-weight: 800; color: #d9dcff; margin-bottom: 8px; }
+        .contact-cta h2 { color: #fff; border: 0; padding: 0; margin: 0 0 8px; font-size: clamp(1.35rem, 2.5vw, 1.9rem); }
+        .contact-cta p { color: rgba(255,255,255,0.88); margin: 0 0 12px; line-height: 1.6; max-width: 650px; }
+        .contact-email { color: #fff; font-weight: 700; text-decoration: none; overflow-wrap: anywhere; }
+        .contact-email:hover { text-decoration: underline; }
+        .contact-cta-actions { display: flex; flex-direction: column; align-items: stretch; gap: 10px; min-width: 190px; }
+        .contact-primary-btn, .contact-secondary-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; border-radius: 12px; padding: 13px 18px; text-decoration: none; font-weight: 700; transition: transform 0.2s ease, background 0.2s ease; }
+        .contact-primary-btn { background: #fff; color: #34346f; box-shadow: 0 7px 18px rgba(0,0,0,0.16); }
+        .contact-secondary-btn { color: #fff; border: 1px solid rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); }
+        .contact-primary-btn:hover, .contact-secondary-btn:hover { transform: translateY(-2px); }
+        .contact-secondary-btn:hover { background: rgba(255,255,255,0.16); }
+
+        @media (max-width: 700px) {
+            .contact-cta { flex-direction: column; align-items: stretch; padding: 25px 22px; gap: 20px; }
+            .contact-cta-actions { min-width: 0; }
+        }
+
         .section {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -590,6 +638,19 @@
                 </a>
             </div>
         </div>
+
+        <section class="contact-cta" aria-label="Direct contact">
+            <div class="contact-cta-copy">
+                <span class="contact-cta-eyebrow"><i class="fas fa-paper-plane" aria-hidden="true"></i> LET’S CONNECT</span>
+                <h2>Have a question or opportunity?</h2>
+                <p>Get in touch directly — I’d be happy to hear from you about IT support, cloud opportunities, or a project.</p>
+                <a class="contact-email" href="mailto:jasonmariakieran@gmail.com"><i class="fas fa-envelope" aria-hidden="true"></i> jasonmariakieran@gmail.com</a>
+            </div>
+            <div class="contact-cta-actions">
+                <a class="contact-primary-btn" href="mailto:jasonmariakieran@gmail.com?subject=Enquiry%20for%20Jason%20Harvey">Email Jason <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                <a class="contact-secondary-btn" href="#contact-form">Use contact form</a>
+            </div>
+        </section>
 
         <div class="section">
             <h2>Professional Summary</h2>
